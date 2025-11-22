@@ -1,6 +1,5 @@
 package com.pointerview.api.authorization_server.persistence.entity.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,7 +10,6 @@ public class GrantedPermission {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "role_id")
     private Role role;
 

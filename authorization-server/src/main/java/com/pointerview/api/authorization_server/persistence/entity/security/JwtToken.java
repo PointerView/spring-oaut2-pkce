@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
-@Entity
+// @Entity
 public class JwtToken {
 
     @Id
@@ -21,7 +21,6 @@ public class JwtToken {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
 
     public Long getId() {
         return id;

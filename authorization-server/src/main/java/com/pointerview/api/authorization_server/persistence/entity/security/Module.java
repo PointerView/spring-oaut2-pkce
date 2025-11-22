@@ -13,6 +13,7 @@ public class Module {
     private Long id;
 
     private String name;
+
     private String basePath;
 
     public Long getId() {

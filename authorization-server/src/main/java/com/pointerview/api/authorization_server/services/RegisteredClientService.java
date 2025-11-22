@@ -7,7 +7,9 @@ import com.pointerview.api.authorization_server.persistence.repository.security.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RegisteredClientService implements RegisteredClientRepository {
 
     @Autowired

@@ -1,8 +1,6 @@
 package com.pointerview.api.authorization_server.persistence.entity.security;
 
-
 import jakarta.persistence.*;
-
 
 @Entity
 public class Operation {
@@ -12,8 +10,11 @@ public class Operation {
     private Long id;
 
     private String name;
+
     private String path;
+
     private String httpMethod;
+
     private boolean permitAll;
 
 //    @ManyToOne

@@ -22,21 +22,23 @@ public class User implements UserDetails {
     private String name;
     private String password;
 
-    //@Enumerated(EnumType.STRING)
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         if(role == null) return null;
 
-        if(role.getPermission() == null) return null;
+        if(role.getPermissions() == null) return null;
 
-        List<SimpleGrantedAuthority> authorities = role.getPermission().stream()
+        List<SimpleGrantedAuthority> authorities = role.getPermissions().stream()
                 .map(each -> each.getOperation().getName())
                 .map(each -> new SimpleGrantedAuthority(each))
+//                .map(each -> {
+//                    String permission = each.name();
+//                    return new SimpleGrantedAuthority(permission);
+//                })
                 .collect(Collectors.toList());
 
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.getName()));
@@ -45,12 +47,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     @Override

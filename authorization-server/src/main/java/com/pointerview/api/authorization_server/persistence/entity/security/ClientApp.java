@@ -11,6 +11,7 @@ public class ClientApp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String clientId;
     private String clientSecret;
 
@@ -29,7 +30,6 @@ public class ClientApp {
     private int durationInMinutes;
 
     private boolean requiredProofKey;
-
 
     public Long getId() {
         return id;

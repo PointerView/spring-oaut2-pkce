@@ -1,5 +1,6 @@
 package com.pointerview.api.authorization_server.persistence.entity.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,8 +14,9 @@ public class Role {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
-    private List<GrantedPermission> permission;
+    private List<GrantedPermission> permissions;
 
     public Long getId() {
         return id;
@@ -32,11 +34,11 @@ public class Role {
         this.name = name;
     }
 
-    public List<GrantedPermission> getPermission() {
-        return permission;
+    public List<GrantedPermission> getPermissions() {
+        return permissions;
     }
 
-    public void setPermission(List<GrantedPermission> permission) {
-        this.permission = permission;
+    public void setPermissions(List<GrantedPermission> permissions) {
+        this.permissions = permissions;
     }
 }

@@ -9,46 +9,34 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 
 import java.time.Duration;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 public class ClientAppMapper {
 
     public static RegisteredClient toRegisteredClient(ClientApp clientApp){
-        // Id es muy parecido al clientId
+
         RegisteredClient client = RegisteredClient.withId(clientApp.getClientId())
-                // id del cliente
                 .clientId(clientApp.getClientId())
-                // password para el cliente
                 .clientSecret(clientApp.getClientSecret())
-                // momento de la creacion del cliente
                 .clientIdIssuedAt(new Date(System.currentTimeMillis()).toInstant())
                 .clientAuthenticationMethods(clientAuthMethods -> {
                     clientApp.getClientAuthenticationMethods().stream()
-                            /*Los ClientAuthenticationMethod son los metodos para enviar el clientId
-                            * y el clientSecret, en este caso en vez de enviar mediante el metodo
-                            * CLIENT_SECRET_JWT, se usará el metodo de envío ClientAuthenticationMethod*/
-                            .map(ClientAuthenticationMethod::new)
+                            .map(method -> new ClientAuthenticationMethod(method))
+//                            .forEach(each -> clientAuthMethods.add(each));
                             .forEach(clientAuthMethods::add);
                 })
                 .authorizationGrantTypes(authGrantTypes -> {
                     clientApp.getAuthorizationGrantTypes().stream()
-                            /*Los AuthorizationGrantType son los tipos de intercambios que hay entre el
-                            * cliente y el authorization server, puede ser un authorization_code, un refresh_token
-                            * o un client_credentials */
-                            .map(AuthorizationGrantType::new)
+                            .map(grantType -> new AuthorizationGrantType(grantType))
                             .forEach(authGrantTypes::add);
                 })
-                /* representan las uris donde se redireccionaran los authorization_codes*/
                 .redirectUris(redirectUris ->
-                        redirectUris.addAll(clientApp.getRedirectUris()))
-                .scopes(scopes ->
-                        scopes.addAll(clientApp.getScopes()))
-                /*Configura el token para este cliente especifico como su tiempo de expiracion*/
+                        clientApp.getRedirectUris().stream().forEach(redirectUris::add))
+                // Indica que permisos tiene este cliente dependiendo del role(role = authorities)
+                .scopes(scopes -> clientApp.getScopes().stream().forEach(scopes::add))
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofMinutes(clientApp.getDurationInMinutes()))
-                        .refreshTokenTimeToLive(Duration.ofMinutes(clientApp.getDurationInMinutes() * 4L))
+                        .refreshTokenTimeToLive(Duration.ofMinutes(clientApp.getDurationInMinutes() * 4))
                         .build())
-                // Indica que tipo de flujo quiere seguir el cliente
                 .clientSettings(ClientSettings.builder()
                         .requireProofKey(clientApp.isRequiredProofKey())
                         .build())
@@ -56,4 +44,5 @@ public class ClientAppMapper {
 
         return client;
     }
+
 }
